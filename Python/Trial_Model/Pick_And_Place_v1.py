@@ -2,7 +2,7 @@
 from pyniryo import *
 
 tool_used = ToolID.XXX  # Tool used for picking
-robot_ip_address = "x.x.x.x" # Robot address
+robot_ip_address = "ip address" # Robot address
 
 # The pick pose
 pick_pose = PoseObject(
@@ -14,7 +14,7 @@ place_pose = PoseObject(
     x=0.0, y=-0.25, z=0.1,
     roll=0.0, pitch=1.57, yaw=-1.57)
 
-def pick_n_place_version_1(robot):
+def pick_n_place_version(robot):
     height_offset = 0.05  # Offset according to Z-Axis to go over pick & place poses
     gripper_speed = 400
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # Changing tool
     client.update_tool()
 
-    pick_n_place_version_x(client)
+    pick_n_place_version(client)
 
     # Releasing connection
     client.close_connection()

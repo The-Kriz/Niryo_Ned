@@ -1,6 +1,11 @@
+"""
+Control of full Ned Niryo Bot
+"""
+
 from pyniryo import *
 from Ned_Constants import *
 from pyniryo.vision import *
+from ComputerVisionNed import *
 
 def robotStart():
     """
@@ -88,52 +93,6 @@ def robotPlaceOnCell(Client,Cell_Address):
     Client.move_pose(Board_Observation_Pose)
     Client.wait(Robot_Sleep)
 
-def robotGameCellReset(Client):
-    """
-    finds all the Blocks
-    picks all Robot_Block one by one
-        place it in *Place_To_Tray*
-    picks all Human_Block one by one
-        place it in *Place_To_Tray*
-
-    :param Client:
-    :return:
-    """
-    Client.move_pose(Board_Observation_Pose)
-    Client.wait(Robot_Sleep)
-
-    while True:
-        object_found, object_pose, object_shape, object_color = Client.detect_object(Robot_Workspace,
-                                                                         shape=Robot_Block_Shape,
-                                                                         color=Robot_Block_Colour)
-        if obj_found:
-            if object_shape == Robot_Block_Shape_Str or object_color == Robot_Block_Colour_Str :
-                Client.pick_from_pose(object_pose)
-                Client.wait(Robot_Sleep)
-                Client.place_from_pose(Place_To_Tray)
-                Client.wait(Robot_Sleep)
-        else:
-            break
-
-        Client.move_pose(Board_Observation_Pose)
-        Client.wait(Robot_Sleep)
-
-    while True:
-        object_found, object_pose, object_shape, object_color = Client.detect_object(Robot_Workspace,
-                                                                         shape=Human_Block_Shape,
-                                                                         color=Human_Block_Colour)
-        if obj_found:
-            if object_shape == Human_Block_Shape_Str or object_color == Human_Block_Colour_Str :
-                Client.pick_from_pose(object_pose)
-                Client.wait(Robot_Sleep)
-                Client.place_from_pose(Place_To_Human_Tray)
-                Client.wait(Robot_Sleep)
-        else:
-            break
-
-        Client.move_pose(Board_Observation_Pose)
-        Client.wait(Robot_Sleep)
-
 def robotBackHome(Client):
     """
     Moves the robot back to Home
@@ -169,71 +128,35 @@ def turnOffLearningMode(Client):
     Client.move_to_home_pose()
 
 
+def ResetrobotGameCell(Client):  # neeeeeeeeed to fix
+    """
 
+    :param Client:
+    :return:
+    """
+    Client.move_pose(Board_Observation_Pose)
+    Client.wait(Robot_Sleep)
 
+    while True:
+        Robot_ObjectPicked =  pickOnVision(Client,Robot_Workspace,shape=Robot_Block_Shape,color=Robot_Block_Colour)
+        if Robot_ObjectPicked is True:
+            Client.place_from_pose(Place_To_Tray)
+            Client.move_pose(Board_Observation_Pose)
+            Client.wait(Robot_Sleep)
+        else:
+            break
 
+    while True:
+        Human_ObjectPicked = pickOnVision(Client, Robot_Workspace, shape=Human_Block_Shape, color=Human_Block_Colour)
+        if Human_ObjectPicked is True:
+                Client.place_from_pose(Place_To_Human_Tray)
+                Client.move_pose(Board_Observation_Pose)
+                Client.wait(Robot_Sleep)
+        else:
+            break
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def positionCordinates(Image,MaskColour, MaskReturn = False):
-#     hsv_img = cv2.cvtColor(Image, cv2.COLOR_BGR2HSV)
-#     mask = cv2.inRange(hsv_img, MaskColour[0], MaskColour[1])
-#     contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-#     for contour in contours:
-#         M = cv2.moments(contour)
-#     if M["m00"] != 0:
-#         center_x = int(M["m10"] / M["m00"])
-#     center_y = int(M["m01"] / M["m00"])
-#     cv2.circle(img, (center_x, center_y), 5, (0, 255, 0), -1)
-#     if MaskReturn == True:
-#         return center_x, center_y, mask
-#     else:
-#         return center_x,center_y
-
-
-
-
-
+        Client.move_pose(Board_Observation_Pose)
+        Client.wait(Robot_Sleep)
 
 
 

@@ -3,7 +3,7 @@ import numpy as np
 from pyniryo import *
 from pyniryo.vision import *
 from ComputerVision_Constants import *
-
+from Ned_Constants import *
 
 def initializeCamera(Client):
     """
@@ -148,27 +148,31 @@ def boardCellDivision(Image):
             cell_coords.append((x1, y1, x2, y2))
     return cell_coords
 
-def FindCell(Image,positionCordinates,):
+def FindCell(Image,positionCordinates):
     """
     checks the position of block in the cell and return cell address
     :param Image:
     :param positionCordinates: array [x,y] of the block
     :return: cell address
     """
-    h, w, _ = Image.shape
-    cell_size = (w // 3, h // 3)
-    x,y = positionCordinates[0],positionCordinates[1]
-    col_idx = x // cell_size[0]
-    row_idx = y // cell_size[1]
+    height, width, _ = Image.shape
+    cell_size = (width // 3, height // 3)
+    X_Cordinate,Y_Cordinate = positionCordinates[0],positionCordinates[1]
+    Column_Id = X_Cordinate // cell_size[0]
+    Row_Id = Y_Cordinate // cell_size[1]
 
-    return row_idx, col_idx
+    return Row_Id, Column_Id
 
-def getMatrix(Image):
+def getMatrix(Image = None,Client = None, ImgReturn = False):
     """
     from the image, finds the cell location of each block and return matrix with 1(Robot) 0(No bloock) -1(Human)
     :param Image:
+    :param Client if no image given
+    :param if image return is needed
     :return: Matrix of size 3x3 with location of each block
     """
+    if Image is None:
+        Image =  workSpaceImageTrim(Client)
     filtered_contours_locations_Circle_Red, markerd_img_Circle_Red , masked_img_Circle_Red = positionCordinates(Image,Red_Colour,shape= "CIRCLE", MaskReturn = True, MarkerReturn= True)
     filtered_contours_locations_Square_Blue, markerd_img_Square_Blue , masked_img_Square_Blue = positionCordinates(Image,Blue_Colour,shape= "SQUARE", MaskReturn = True, MarkerReturn= True)
     matrix = [["0","0","0"],
@@ -180,5 +184,75 @@ def getMatrix(Image):
     for i in filtered_contours_locations_Circle_Red:
         row_idx, col_idx = FindCell(Image, i)
         matrix[row_idx][col_idx] = "-1"
-    return matrix, markerd_img_Circle_Red,masked_img_Circle_Red,markerd_img_Square_Blue,masked_img_Square_Blue
+    if ImgReturn == True :
+        return matrix , markerd_img_Circle_Red,masked_img_Circle_Red,markerd_img_Square_Blue,masked_img_Square_Blue
+    else:
+        return matrix
 
+def robotGameCellReset(Client):
+    """
+    finds all the Blocks
+    picks all Robot_Block one by one
+        place it in *Place_To_Tray*
+    picks all Human_Block one by one
+        place it in *Place_To_Tray*
+
+    :param Client:
+    :return:
+    """
+    Client.move_pose(Board_Observation_Pose)
+    Client.wait(Robot_Sleep)
+
+    while True:
+        Robot_object_found, _,_ = Client.vision_pick(Robot_Workspace,
+                                                     height_offset=0.0,
+                                                     shape=Robot_Block_Shape,
+                                                     color=Robot_Block_Colour)
+        print(Robot_object_found)
+        if Robot_object_found:
+            Client.place_from_pose(Place_To_Tray)
+            Client.wait(Robot_Sleep)
+        else:
+            break
+
+        Client.move_pose(Board_Observation_Pose)
+        Client.wait(Robot_Sleep)
+
+    while True:
+        Human_object_found,_,_ =  Client.vision_pick(Robot_Workspace,
+                                                    height_offset=0.0,
+                                                     shape=Human_Block_Shape)
+                                                    #,color=Human_Block_Colour)
+
+        if Human_object_found:
+            Client.place_from_pose(Place_To_Human_Tray)
+            Client.wait(Robot_Sleep)
+        else:
+            break
+
+        Client.move_pose(Board_Observation_Pose)
+        Client.wait(Robot_Sleep)
+
+def pickOnVision(Client,Robot_Workspace,height_offset=0.0,Block_shape = ObjectShape.ANY, Block_color = ObjectColor.ANY):  # neeeed to fix
+    """
+    Check if the specified block is preset if present pick and return True if present else fales
+    :param Client:
+    :param Robot_Workspace: work space to pick from
+    :param height_offset:
+    :param Block_shape: shape of the block to pick
+    :param Block_color: colour of the block to pick
+    :return:
+    """
+    Robot_object_found, _, _ = Client.vision_pick(Robot_Workspace,
+                                                 height_offset=0.0,
+                                                 shape=Block_shape,
+                                                 color=Block_color)
+    if Robot_object_found:
+        return True
+        # Client.place_from_pose(Place_To_Tray)
+        # Client.wait(Robot_Sleep)
+    else:
+        return  False
+
+    # Client.move_pose(Board_Observation_Pose)
+    # Client.wait(Robot_Sleep)

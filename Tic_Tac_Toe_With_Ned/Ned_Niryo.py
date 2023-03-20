@@ -128,7 +128,7 @@ def turnOffLearningMode(Client):
     Client.move_to_home_pose()
 
 
-def ResetrobotGameCell(Client):  # neeeeeeeeed to fix
+def ResetrobotGameCell(Client): 
     """
 
     :param Client:
@@ -157,6 +157,12 @@ def ResetrobotGameCell(Client):  # neeeeeeeeed to fix
 
         Client.move_pose(Board_Observation_Pose)
         Client.wait(Robot_Sleep)
+
+
+
+
+
+
 
 
 

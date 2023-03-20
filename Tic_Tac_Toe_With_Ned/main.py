@@ -1,4 +1,4 @@
-from Ned_Retry import *
+from Ned_Niryo import *
 from ComputerVisionNed import *
 import time
 from MinMax import *

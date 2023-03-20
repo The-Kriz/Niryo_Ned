@@ -10,10 +10,6 @@ Gripper_Tool_Speed = 500 #Tool gripper speed
 Max_Board_Pick_Count = 9
 
 
-
-
-#PoseObjects ////////////////////////////////////////////////////////////////////////////////////////
-
 Home = PoseObject(
                     x=0.30, y=0.0, z=0.15,
                     roll=0, pitch=1.57, yaw=0.0,
@@ -21,18 +17,10 @@ Home = PoseObject(
 
 
 Pick_From_Tray = PoseObject(
-    x=0.218, y=0.258, z=0.134,
-roll = 2.162, pitch = 1.078, yaw = 2.132
+                            x=0.218, y=0.258, z=0.134,
+                            roll = 2.162, pitch = 1.078, yaw = 2.132
+                           )
 
-                         )
-
-"""
-    x=0.2222, y=0.2643, z=0.1405,
-roll = 2.251, pitch = 1.124, yaw = 2.127
-"""
-"""    x=0.214, y=0.265, z=0.135,
-roll = 2.243, pitch = 1.122, yaw = 2.212"""
-""""""
 
 Place_To_Tray = PoseObject(
                             x=0.061, y=0.257, z=0.192,
@@ -42,12 +30,7 @@ Place_To_Tray = PoseObject(
 Place_To_Human_Tray = PoseObject(
                                 x=0.266, y=-0.17, z=0.12,
                                 roll=2.88, pitch=1.56, yaw=2.892,
-                            )
-
-# Pick_From_Board = PoseObject(
-#                             x=0.30, y=0.0, z=0.15,
-#                             roll=0, pitch=1.57, yaw=0.0
-#                             )
+                              )
 
 
 Board_Observation_Pose = PoseObject(
@@ -101,10 +84,4 @@ Board_place_pose_cell_22 = PoseObject(
                                         x = -0.0573, y = -0.1899, z = 0.0959,
                                         roll = -0.326, pitch = 1.535, yaw = -1.870
                                     )
-
-
-
-
-
-
 

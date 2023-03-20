@@ -83,7 +83,6 @@ def minimax(board, depth, isMax):
                     board[i][j] = '0'
         return best
 
-
 def findBestMove(board):
     bestVal = -1000
     bestMove = (-1, -1)

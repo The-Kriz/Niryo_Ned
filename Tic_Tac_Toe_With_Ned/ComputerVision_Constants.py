@@ -1,4 +1,7 @@
 import numpy as np
+from pyniryo import *
+from pyniryo.vision import *
+
 
 
 # Blue color range
@@ -21,5 +24,20 @@ Green_Colour = [lower_green,upper_green]
 Square_Block_ContourArea_Range = [1450,1700]
 Circle_Block_ContourArea_Range = [800,1150]
 
+#Objects
+Circle_Block = ObjectShape.CIRCLE
+Square_Block = ObjectShape.SQUARE
+Red_Block = ObjectColor.RED
+Blue_Block = ObjectColor.BLUE
+Green_Block = ObjectColor.GREEN
 
+Robot_Block_Shape = ObjectShape.SQUARE
+Robot_Block_Shape_Str = "SQUARE"
+Robot_Block_Colour = ObjectColor.BLUE
+Robot_Block_Colour_Str = "BLUE"
+
+Human_Block_Shape = ObjectShape.CIRCLE
+Human_Block_Shape_Str = "CIRCLE"
+Human_Block_Colour = ObjectColor.RED
+Human_Block_Colour_Str = "RED"
 

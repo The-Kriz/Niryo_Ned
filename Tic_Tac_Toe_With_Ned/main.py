@@ -16,22 +16,23 @@ while True:
     if count < 8 and Game_End_State == False:
         player = WhoHasToPlay(count)
         if player == "Human":
-            time.sleep(2)
-            while True:
-                matrix1 = getMatrix()
-                if matrix1 != matrix :
-                    break
-                else:
-                    time.sleep(1)
+            played = input("Press enter after your move")
+#             time.sleep(2)
+#             while True:
+#                 matrix1 = getMatrix(Client=Ned)
+#                 if matrix1 != matrix :
+#                     break
+#                 else:
+#                     time.sleep(1)
         else :
             bestMove = findBestMove(matrix)
-            robotPlaceOnCell(robot,bestMove)
+            robotPlaceOnCell(Ned,bestMove)
         count += 1
     else:
         break
 report(count, Game_End_State)
 time.sleep(1)
-robotStop(robot)
+robotStop(Ned)
 
 
 
